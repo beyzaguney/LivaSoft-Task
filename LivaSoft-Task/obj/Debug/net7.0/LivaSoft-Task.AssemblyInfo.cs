@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("LivaSoft-Task")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+dee93baa5e3aa63e1317c55fc12d707cdc0cf542")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+891b3a185ef62eda2d8a23986295e630d6d41d24")]
 [assembly: System.Reflection.AssemblyProductAttribute("LivaSoft-Task")]
 [assembly: System.Reflection.AssemblyTitleAttribute("LivaSoft-Task")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

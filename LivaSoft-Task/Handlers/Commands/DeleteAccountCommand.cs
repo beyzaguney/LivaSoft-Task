@@ -20,17 +20,23 @@ namespace LivaSoft_Task.Handlers.Commands
 
 			public async Task<bool> Handle(DeleteAccountCommand request, CancellationToken cancellationToken)
 			{
-				var account = await _appDbContext.Accounts.FindAsync(request.Id);
-				if (account != null)
+				try
 				{
+					var account = await _appDbContext.Accounts.FindAsync(request.Id);
+					if (account == null)
+					{
+						_logger.LogError("Hesap silinemedi. Belirtilen hesap bulunamadı.");
+						return false;
+					}
+
 					_appDbContext.Accounts.Remove(account);
 					await _appDbContext.SaveChangesAsync();
 					_logger.LogInformation("Hesap silindi: " + account.Id);
 					return true;
 				}
-				else
+				catch (Exception ex)
 				{
-					_logger.LogError("Hesap silinemedi. Belirtilen hesap bulunamadı.");
+					_logger.LogError("Hesap silinemedi.", ex.Message);
 					return false;
 				}
 			}

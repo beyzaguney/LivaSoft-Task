@@ -34,7 +34,7 @@ public class CreateCustomerCommand:IRequest<bool>
 			}
 			catch (Exception ex)
 			{
-				_logger.LogError(ex, "Müşteri eklenemedi. {Message}", ex.Message);
+				_logger.LogError("Müşteri eklenemedi.", ex.Message);
 				return false;
 			}
 		}

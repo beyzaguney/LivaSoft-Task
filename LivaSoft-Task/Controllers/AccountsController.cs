@@ -22,7 +22,7 @@ namespace LivaSoft_Task.Controllers
 			var result = await Mediatr.Send(new GetAllByCustomerIdQuery(id));
 			return Ok(result);
 		}
-		[HttpPost("Add") ]
+		[HttpPost("AddByCustomerId/{id}") ]
 		public async Task<IActionResult> Add([FromBody] CreateAccountCommand createCommand)
 		{
 			var result = await Mediatr.Send(createCommand);

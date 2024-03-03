@@ -25,19 +25,27 @@ namespace LivaSoft_Task.Handlers.Commands
 				try
 				{
 					//ekleme yaparken json'dan customer nesnesini silmem gerekiyor
-					_appDbContext.Accounts.Entry(new()
+					var customer = await _appDbContext.Customers.FindAsync(request.CustomerId);
+					if (customer != null)
 					{
-						CustomerId = request.CustomerId
+						_appDbContext.Accounts.Entry(new()
+						{
+							CustomerId = request.CustomerId
 
-					}).State = EntityState.Added;
-					await _appDbContext.SaveChangesAsync();
-					_logger.LogInformation("Hesap eklendi: " + request.Account.Id);
-
-					return true;
+						}).State = EntityState.Added;
+						await _appDbContext.SaveChangesAsync();
+						_logger.LogInformation("Hesap eklendi: " + request.Account.Id);
+						return true;
+					}
+					else
+					{
+						_logger.LogError("Hesap eklenemedi. Müşteri bulunamadı.");
+						return false;
+					}
 				}
 				catch (Exception ex)
 				{
-					_logger.LogError(ex, "Hesap eklenemedi. {Message}", ex.Message);
+					_logger.LogError("Hesap eklenemedi.", ex.Message);
 					return false;
 				}
 			}
