@@ -11,21 +11,32 @@ public class CreateCustomerCommand:IRequest<bool>
 	public class CreateCustomerCommandHandler : IRequestHandler<CreateCustomerCommand, bool>
 	{
 		private readonly AppDbContext _appDbContext;
+		private readonly ILogger<CreateCustomerCommandHandler> _logger;
 
-		public CreateCustomerCommandHandler(AppDbContext appDbContext)
+		public CreateCustomerCommandHandler(AppDbContext appDbContext, ILogger<CreateCustomerCommandHandler> logger)
 		{
 			_appDbContext = appDbContext;
+			_logger = logger;
 		}
 
 		public async Task<bool> Handle(CreateCustomerCommand request, CancellationToken cancellationToken)
 		{
-			_appDbContext.Customers.Entry(new()
+			try
 			{
-				Name = request.Name,
-				Surname = request.Surname
-			}).State=EntityState.Added;
-			await _appDbContext.SaveChangesAsync();
-			return true;
+				_appDbContext.Customers.Entry(new()
+				{
+					Name = request.Name,
+					Surname = request.Surname
+				}).State = EntityState.Added;
+				await _appDbContext.SaveChangesAsync();
+				_logger.LogInformation("Müşteri eklendi: " + request.Name + " " + request.Surname);
+				return true;
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError(ex, "Müşteri eklenemedi. {Message}", ex.Message);
+				return false;
+			}
 		}
 	}
 }

@@ -26,6 +26,10 @@ namespace LivaSoft_Task.Controllers
 			var result = await Mediatr.Send(createCommand);
 			return Created("Customer Created", result);
 		}
-		
+		[HttpDelete("DeleteById/{id}")]
+		public async Task<IActionResult> Delete(Guid id)
+		{
+			return Ok(await Mediatr.Send(new DeleteCustomerCommand { Id = id }));
+		}
 	}
 }

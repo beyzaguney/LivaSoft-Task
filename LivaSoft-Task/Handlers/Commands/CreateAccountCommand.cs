@@ -13,22 +13,33 @@ namespace LivaSoft_Task.Handlers.Commands
         public class CreateAccountCommandHandler : IRequestHandler<CreateAccountCommand, bool>
 		{
 			private readonly AppDbContext _appDbContext;
-			public CreateAccountCommandHandler(AppDbContext appDbContext)
+			private readonly ILogger<CreateAccountCommandHandler> _logger;
+			public CreateAccountCommandHandler(AppDbContext appDbContext, ILogger<CreateAccountCommandHandler> logger)
 			{
 				_appDbContext = appDbContext;
+				_logger = logger;
 			}
 
 			public async Task<bool> Handle(CreateAccountCommand request, CancellationToken cancellationToken)
 			{
-
-				_appDbContext.Accounts.Entry(new()
+				try
 				{
-					CustomerId = request.CustomerId
-					
-				}).State = EntityState.Added;
-				await _appDbContext.SaveChangesAsync();
+					//ekleme yaparken json'dan customer nesnesini silmem gerekiyor
+					_appDbContext.Accounts.Entry(new()
+					{
+						CustomerId = request.CustomerId
 
-				return true;
+					}).State = EntityState.Added;
+					await _appDbContext.SaveChangesAsync();
+					_logger.LogInformation("Hesap eklendi: " + request.Account.Id);
+
+					return true;
+				}
+				catch (Exception ex)
+				{
+					_logger.LogError(ex, "Hesap eklenemedi. {Message}", ex.Message);
+					return false;
+				}
 			}
 		}
 	}

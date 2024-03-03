@@ -10,30 +10,28 @@ namespace LivaSoft_Task.Controllers
 	public class AccountsController : BaseController
 	{
 		public AccountsController(IMediator mediatr) : base(mediatr) { }
-		[HttpGet]
+		[HttpGet("GetAll")]
 		public async Task<IActionResult> List()
 		{
 			var result = await Mediatr.Send(new GetAccountsQuery());
 			return Ok(result);
 		}
-		[HttpGet("{id}", Name="GetById")]
+		[HttpGet("GetByCustomerId/{id}")]
 		public async Task<IActionResult> GetByCustomerId(Guid id)
 		{
 			var result = await Mediatr.Send(new GetAllByCustomerIdQuery(id));
 			return Ok(result);
 		}
-		[HttpPost]
+		[HttpPost("Add") ]
 		public async Task<IActionResult> Add([FromBody] CreateAccountCommand createCommand)
 		{
-			//mediator send (request adı)
 			var result = await Mediatr.Send(createCommand);
 			return Created("Account Created", result);
 		}
-		[HttpDelete("{id}")]
+		[HttpDelete("DeleteById/{id}")]
 		public async Task<IActionResult> Delete(Guid id)
 		{
-			//mediator send (request adı)
-			return Ok(await Mediatr.Send(new DeleteAccountCommandRequest { Id = id }));
+			return Ok(await Mediatr.Send(new DeleteAccountCommand { Id = id }));
 		}
 
 	}

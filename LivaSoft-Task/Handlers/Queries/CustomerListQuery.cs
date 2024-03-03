@@ -19,7 +19,6 @@ namespace LivaSoft_Task.Handlers.Queries
 			{
 				_appDbContext = appDbContext;
 			}
-			//Çalışan alan burası 
 			public async Task<ICollection<Customer>> Handle(CustomerListQuery request, CancellationToken cancellationToken)
 			{
 				return _appDbContext.Customers.ToList();
